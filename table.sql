@@ -4,7 +4,7 @@ CREATE TABLE "cake"(
     "price" DOUBLE PRECISION NOT NULL,
     "image" VARCHAR(1000) NOT NULL,
     "description" TEXT NOT NULL,
-    "createdAt" TIMESTAMP NOT NULL
+    "createdAt" DATE NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE "clients"(
@@ -16,10 +16,10 @@ CREATE TABLE "clients"(
 
 CREATE TABLE "orders"(
     "id" SERIAL PRIMARY KEY,
-    "clientId" INTEGER NOT NULL,
-    "cakeId" INTEGER NOT NULL,
+    "clientId" INTEGER NOT NULL REFERENCES "clients"("id") ,
+    "cakeId" INTEGER NOT NULL REFERENCES "cake"("id"),
     "quantity" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP NOT NULL,
+    "createdAt" DATE NOT NULL DEFAULT NOW(),
     "totalPrice" DOUBLE PRECISION NOT NULL,
 );
 
