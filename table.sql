@@ -9,9 +9,9 @@ CREATE TABLE "cake"(
 
 CREATE TABLE "clients"(
     "id" SERIAL PRIMARY KEY,
-    "name" VARCHAR(100) NOT NULL,
+    "name" VARCHAR(200) NOT NULL,
     "address" VARCHAR(1000) NOT NULL,
-    "phone" VARCHAR(1000) NOT NULL
+    "phone" VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE "orders"(
