@@ -3,8 +3,7 @@ CREATE TABLE "cake"(
     "name" VARCHAR(100) NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "image" VARCHAR(1000) NOT NULL,
-    "description" TEXT NOT NULL,
-    "createdAt" DATE NOT NULL DEFAULT NOW()
+    "description" TEXT NOT NULL
 );
 
 CREATE TABLE "clients"(
@@ -19,7 +18,7 @@ CREATE TABLE "orders"(
     "clientId" INTEGER NOT NULL REFERENCES "clients"("id") ,
     "cakeId" INTEGER NOT NULL REFERENCES "cake"("id"),
     "quantity" INTEGER NOT NULL,
-    "createdAt" DATE NOT NULL DEFAULT NOW(),
-    "totalPrice" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+    "totalPrice" DOUBLE PRECISION NOT NULL
 );
 
