@@ -18,11 +18,18 @@ export async function getOrdersByClientId(req, res) {
     try {
         const findClient = await connection.query(`SELECT id FROM clients WHERE id = $1`, [id])
         if (findClient.rowCount === 0) return res.sendStatus(404)
-        const orders = await connection.query(` SELECT * FROM orders WHERE "clientId"=$1`, [id])
+        
+        
+        const orders = await connection.query(
+            `SELECT orders.id AS "orderId", orders.quantity, orders."createdAt", orders."totalPrice", cake.name 
+            AS "cakeName"
+            FROM orders
+            JOIN cake ON cake.id = orders."cakeId"
+            WHERE "clientId"=$1`, [id])
         res.send(orders.rows)
 
     } catch (error) {
         console.log(error.message)
         res.sendStatus(500)
     }
-}
+};

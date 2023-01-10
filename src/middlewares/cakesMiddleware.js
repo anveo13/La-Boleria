@@ -7,7 +7,7 @@ export function cakesMiddleware(req, res, next) {
     if (validationLink.error) return res.status(422).send("Coloque uma imagem valida")
 
     const validation = cakesSchema.validate({ name, price, description })
-    if (validation.error) return res.status(400).send("Coloque uma descrição valida")
+    if (validation.error) return res.status(400).send("Nome e preço não podem esta vazios")
 
 
     if (name.length <= 2) return res.status(400).send("Minimo 2 caracteres para o nome");

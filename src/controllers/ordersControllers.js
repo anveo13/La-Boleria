@@ -3,8 +3,7 @@ import dayjs from "dayjs";
 
 export async function postOrders(req, res) {
     const { clientId, cakeId, quantity, totalPrice } = req.body
-    const createAt = dayjs().format("YYYY-MM-DD");
-
+    const createdAt = dayjs().format("YYYY-MM-DD");
     try {
         const findClient = await connection.query(`SELECT * FROM clients WHERE id=$1`, [clientId]);
         if (findClient.rowCount === 0) return res.status(404).send("Não achamos você em nosso, sistema. Por favor refaça o cadastro");
@@ -16,7 +15,7 @@ export async function postOrders(req, res) {
             ("clientId", "cakeId", quantity,  "createdAt", "totalPrice")
         VALUES
             ($1, $2, $3, $4, $5)`,
-            [clientId, cakeId, quantity, createAt, totalPrice])
+            [clientId, cakeId, quantity, createdAt, totalPrice])
         res.sendStatus(201)
     } catch (error) {
         res.status(500).send(error.message)
@@ -32,7 +31,7 @@ export async function getOrders(req, res) {
                 SELECT 
                     c.id AS "clientId", c.name AS "clientName", c.address AS "clientAddress", c.phone AS "clientPhone",
                     ca.id AS "cakeId", ca.name AS "cakeName", ca.price AS "cakePrice", ca.description AS "cakeDescription", ca.image AS "cakeImage",
-                    o."createAt" AS createdAt, o.quantity AS "orderQuantity", o."totalPrice" AS "orderTotalPrice"
+                    o.id AS "orderId", o."createdAt" AS createdAt, o.quantity AS "orderQuantity", o."totalPrice" AS "orderTotalPrice"
                 FROM
                     orders o
                 JOIN clients c ON c.id = o."clientId"
@@ -52,6 +51,7 @@ export async function getOrders(req, res) {
                         cakePrice,
                         cakeDescription,
                         cakeImage,
+                        orderId,
                         createdAt,
                         orderQuantity,
                         orderTotalPrice
@@ -71,6 +71,7 @@ export async function getOrders(req, res) {
                             description: cakeDescription,
                             image: cakeImage
                         },
+                        orderId: orderId,
                         createdAt: createdAt,
                         quantity: orderQuantity,
                         totalPrice: orderTotalPrice
@@ -83,12 +84,12 @@ export async function getOrders(req, res) {
                 SELECT 
                 c.id AS "clientId", c.name AS "clientName", c.address AS "clientAddress", c.phone AS "clientPhone",
                 ca.id AS "cakeId", ca.name AS "cakeName", ca.price AS "cakePrice", ca.description AS "cakeDescription", ca.image AS "cakeImage",
-                o."createAt" AS createdAt, o.quantity AS "orderQuantity", o."totalPrice" AS "orderTotalPrice"
+                o.id AS "orderId", o."createdAt" AS createdAt, o.quantity AS "orderQuantity", o."totalPrice" AS "orderTotalPrice"
                 FROM
                 orders o
                 JOIN clients c ON c.id = o."clientId"
                 JOIN cake ca ON ca.id = o."cakeId"
-                WHERE o."createAt" = $1`
+                WHERE o."createdAt" = $1`
 
                 , rowMode: "array"
             }, [date]);
@@ -105,6 +106,7 @@ export async function getOrders(req, res) {
                         cakePrice,
                         cakeDescription,
                         cakeImage,
+                        orderId,
                         createdAt,
                         orderQuantity,
                         orderTotalPrice
@@ -124,6 +126,7 @@ export async function getOrders(req, res) {
                             description: cakeDescription,
                             image: cakeImage
                         },
+                        orderId: orderId,
                         createdAt: createdAt,
                         quantity: orderQuantity,
                         totalPrice: orderTotalPrice
@@ -152,7 +155,7 @@ export async function getOrderById(req, res) {
                 SELECT 
                 c.id AS "clientId", c.name AS "clientName", c.address AS "clientAddress", c.phone AS "clientPhone",
                 ca.id AS "cakeId", ca.name AS "cakeName", ca.price AS "cakePrice", ca.description AS "cakeDescription", ca.image AS "cakeImage",
-                o."createAt" AS createdAt, o.quantity AS "orderQuantity", o."totalPrice" AS "orderTotalPrice"
+                o.id AS "orderId", o."createdAt" AS createdAt, o.quantity AS "orderQuantity", o."totalPrice" AS "orderTotalPrice"
                 FROM
                 orders o
                 JOIN clients c ON c.id = o."clientId"
@@ -173,6 +176,7 @@ export async function getOrderById(req, res) {
                     cakePrice,
                     cakeDescription,
                     cakeImage,
+                    orderId,
                     createdAt,
                     orderQuantity,
                     orderTotalPrice
@@ -192,6 +196,7 @@ export async function getOrderById(req, res) {
                         description: cakeDescription,
                         image: cakeImage
                     },
+                    orderId: orderId,
                     createdAt: createdAt,
                     quantity: orderQuantity,
                     totalPrice: orderTotalPrice
